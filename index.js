@@ -24,7 +24,6 @@ document.addEventListener('scroll', ()=>{
 
 const url = 'https://swapi.dev/api/people/'
 
-
 // 1. jquery ajax method
 $.ajax({
     type: 'GET',
