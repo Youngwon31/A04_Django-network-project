@@ -18,6 +18,12 @@ def post_list_and_create(request):
             isinstance = form.save(commit=False)
             isinstance.author = author
             isinstance.save()
+            return JsonResponse({
+                'title': isinstance.title,
+                'body': isinstance.body,
+                'author': isinstance.author.user.username,
+                'id': isinstance.id,
+            })
 
     context = {
         'form': form,
@@ -26,25 +32,26 @@ def post_list_and_create(request):
 
 
 def load_post_data_view(request, num_posts):
-    visiable = 3
-    upper = num_posts  # 9
-    lower = upper - visiable  # 6
-    size = Post.objects.all().count()
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        visiable = 3
+        upper = num_posts  # 9
+        lower = upper - visiable  # 6
+        size = Post.objects.all().count()
 
-    qs = Post.objects.all()
-    data = []
-    for obj in qs:
-        item = {
-            'id': obj.id,
-            'title': obj.title,
-            'body': obj.body,
-            'liked': True if request.user in obj.liked.all() else False,
-            'count': obj.like_count,
-            'authour': obj.author.user.username
-        }
-        data.append(item)
-    # data = serializers.serialize('json', qs)
-    return JsonResponse({'data': data[lower:upper], 'size': size})
+        qs = Post.objects.all()
+        data = []
+        for obj in qs:
+            item = {
+                'id': obj.id,
+                'title': obj.title,
+                'body': obj.body,
+                'liked': True if request.user in obj.liked.all() else False,
+                'count': obj.like_count,
+                'authour': obj.author.user.username
+            }
+            data.append(item)
+        # data = serializers.serialize('json', qs)
+        return JsonResponse({'data': data[lower:upper], 'size': size})
 
 
 def like_unlike_post(request):
