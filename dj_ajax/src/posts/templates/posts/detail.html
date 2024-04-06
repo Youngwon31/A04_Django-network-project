@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- delete Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -54,6 +54,33 @@
         </div>
     </div>
 
+
+    <!-- carousel -->
+    {% if obj.get_photos %}
+        <div id="carouselExampleControls" class="carousel slide slide mb-2" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for p in obj.get_photos %}
+                    <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                        <img src="{{p.image.url}}" class="d-block w-100" alt="photo {{obj.pk}}">
+                    </div> 
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    {% else %}
+        <div class ="mt-2 mb-2">No photos to show</div>
+    {% endif %}
+
+
+
+    
 
 
 
